@@ -1,31 +1,42 @@
-# React + TypeScript + Vite
+# PSD Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PSD Editor is a web application that allows users to upload PSD templates, manipulate text and image properties, and make creative changes on a canvas.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **PSD Template Upload:** Users can upload PSD templates to the editor.
+- **Canvas Manipulation:** Templates are loaded onto a canvas, where users can make changes.
+- **Text and Image Editing:** Add, modify, and manipulate text and image properties.
+- **State Management:** MobX and MobX-React-Lite are used for efficient state management.
+- **UI Library:** Chakra UI provides a sleek and responsive user interface.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Follow these steps to get PSD Editor up and running on your local machine:
 
-- Configure the top-level `parserOptions` property like this:
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/yourusername/psd-editor.git
+   cd psd-editor
+   ```
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# psd-editor
+3. **Run the Application:**
+   ```bash
+   npm start
+   ```
+
+4. **Open in Browser:**
+   Open your web browser and navigate to [http://localhost:4000](http://localhost:4000).
+
+## Tech Stack
+
+- React
+- Fabric.js
+- MobX
+- MobX-React-Lite
+- Chakra UI
