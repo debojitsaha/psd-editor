@@ -10,7 +10,6 @@ function FontFamilyInput({ value, onChange }: { value?: string; onChange?: (font
       onChange={(e) => onChange?.(e.target.value)}
       maxHeight={60}
       overflowY={"auto"}
-      placeholder="Select font family"
       iconColor="gray.400"
     >
       {fonts.map((font) => (

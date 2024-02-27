@@ -1,5 +1,5 @@
 import { exportedProps, maxUndoRedoSteps, originalHeight, originalWidth } from "@/config/app";
-import { defaultFont } from "@/config/fonts";
+import { defaultFont, defaultFontSize } from "@/config/fonts";
 import { brandLogoKey, mainTextKey, subTextKey } from "@/constants/keys";
 import { addFontFace } from "@/functions/fonts";
 import { objectID } from "@/functions/nanoid";
@@ -348,6 +348,51 @@ export class Canvas {
     }
 
     this.instance.renderAll();
+  }
+
+  *onAddText(text = "Sample Text", { fill = "#0000000", fontSize = defaultFontSize }) {
+    if (!this.instance) return;
+
+    const res: FontFaceResponse = yield addFontFace(defaultFont);
+
+    if (res.error) {
+      console.log("Error", res.error);
+    }
+
+    const textbox = new fabricJS.Textbox(text, {
+      name: objectID("text"),
+      fontFamily: res.name,
+      fill,
+      fontSize,
+      width: 310,
+    });
+
+    this.instance.add(textbox);
+    this.instance.viewportCenterObject(textbox);
+    this.instance.setActiveObject(textbox);
+
+    this.onUpdateObjects();
+
+    this.instance.fire("object:modified", { target: textbox }).renderAll();
+  }
+
+  *onAddImage(source: string, { width = 500, height = 500 }) {
+    if (!this.instance) return;
+
+    const image: fabricJS.Image = yield new Promise((resolve) => {
+      fabricJS.Image.fromURL(source, (image) => resolve(image), { name: objectID("image"), objectCaching: true });
+    });
+
+    image.scaleToHeight(height);
+    image.scaleToWidth(width);
+
+    this.instance.add(image);
+    this.instance.viewportCenterObject(image);
+    this.instance.setActiveObject(image);
+
+    this.onUpdateObjects();
+
+    this.instance.fire("object:modified", { target: image }).renderAll();
   }
 }
 

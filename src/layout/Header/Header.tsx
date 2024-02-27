@@ -3,8 +3,12 @@ import { ActionButton, HeadBar, HeaderLogo } from "../container";
 import zocketLogo from "@/assets/zocket.png";
 import { TypeIcon, ImageIcon, CombineIcon, TrashIcon, UndoIcon, RedoIcon } from "lucide-react";
 import { BringToFrontIcon, SendToBackIcon } from "@/components/Icons";
+import { useCanvas } from "@/store/canvas";
+import { sampleImageURL } from "@/constants/ads";
 
 export default function Header() {
+  const [canvas] = useCanvas();
+
   return (
     <HeadBar>
       <Box width={130}>
@@ -12,13 +16,13 @@ export default function Header() {
       </Box>
       <HStack spacing="2.5" divider={<StackDivider borderColor="gray.200" />}>
         <ButtonGroup spacing="0.5">
-          <ActionButton variant="ghost">
+          <ActionButton variant="ghost" onClick={() => canvas.onAddText("Sample Text", { fill: "#000000" })}>
             <Icon as={TypeIcon} fontSize={20} />
             <Text fontSize="xs" mt="2">
               Text
             </Text>
           </ActionButton>
-          <ActionButton variant="ghost">
+          <ActionButton variant="ghost" onClick={() => canvas.onAddImage(sampleImageURL, { height: 200, width: 200 })}>
             <Icon as={ImageIcon} fontSize={20} />
             <Text fontSize="xs" mt="2">
               Image
