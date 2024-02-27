@@ -69,6 +69,30 @@ export class Canvas {
     this.actionsEnabled = true;
   }
 
+  private *onLoadFromJSON(state: CanvasState) {
+    if (!this.instance) return;
+
+    const active = this.selected ? this.selected.name : false;
+    this.instance.clear();
+    yield new Promise((resolve) => {
+      this.instance!.loadFromJSON(state, () => resolve(state));
+    });
+
+    if (active) {
+      const elements = this.instance!.getObjects();
+      for (const element of elements) {
+        if (element.name === active) {
+          this.instance!.setActiveObject(element);
+          break;
+        }
+      }
+    }
+
+    this.onUpdateObjects();
+    this.actionsEnabled = true;
+    this.instance!.renderAll();
+  }
+
   private onUpdateObjects() {
     if (!this.instance) return;
     const objects = this.instance.getObjects();
@@ -393,6 +417,78 @@ export class Canvas {
     this.onUpdateObjects();
 
     this.instance.fire("object:modified", { target: image }).renderAll();
+  }
+
+  onChangeObjectLayer(layer: "forward" | "backward" | "front" | "back" | number) {
+    if (!this.instance) return;
+
+    const element = this.instance.getActiveObject() as Required<fabricJS.Object>;
+    if (!element) return;
+
+    switch (layer) {
+      case "back":
+        element.sendToBack();
+        break;
+      case "backward":
+        element.sendBackwards();
+        break;
+      case "forward":
+        element.bringForward();
+        break;
+      case "front":
+        element.bringToFront();
+        break;
+      default:
+        element.moveTo(layer);
+        break;
+    }
+
+    this.onUpdateObjects();
+    this.instance.fire("object:modified", { target: element }).renderAll();
+  }
+
+  onDeleteObject() {
+    if (!this.instance) return;
+
+    const elements = this.instance.getActiveObjects() as Required<fabricJS.Object>[];
+    if (!elements) return;
+
+    for (const element of elements) {
+      this.instance.remove(element);
+    }
+
+    this.onUpdateObjects();
+
+    this.instance.fire("object:modified", { target: null }).renderAll();
+  }
+
+  *onUndo() {
+    if (!this.instance || !this.canUndo) return;
+
+    this.actionsEnabled = false;
+    
+    const stack = [...this.undoStack];
+    const state = stack.pop()!;
+    const undoState = stack[stack.length - 1];
+
+    this.undoStack = stack;
+    this.redoStack = [...this.redoStack, state];
+
+    yield this.onLoadFromJSON(undoState);
+  }
+
+  *onRedo() {
+    if (!this.instance || !this.canRedo) return;
+
+    this.actionsEnabled = false;
+
+    const stack = [...this.redoStack];
+    const redoState = stack.pop()!;
+
+    this.redoStack = stack;
+    this.undoStack = [...this.undoStack, redoState];
+
+    yield this.onLoadFromJSON(redoState);
   }
 }
 
