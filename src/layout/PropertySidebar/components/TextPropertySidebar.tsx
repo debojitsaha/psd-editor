@@ -1,3 +1,4 @@
+import FontFamilyInput from "@/components/FontFamilyInput/FontFamilyInput";
 import PropertyInput from "@/components/Input/PropertyInput";
 import { textAlignments } from "@/constants/alignments";
 import { mainTextKey } from "@/constants/keys";
@@ -58,30 +59,23 @@ const TextProperty = ({ canvas }: { canvas: Canvas }) => {
         </Box>
         <Box px="4">
           <Text fontWeight={700} fontSize="sm" mb="1">
-            Font Family
+            Text Properties
           </Text>
           <Grid templateColumns="100px 1fr" mt="3" alignItems="center">
             <Text fontSize="xs" fontWeight={500}>
-              Regular Font
+              Font Family
             </Text>
-            {/* <FontFamilyInput value={selected.fontFamily} onChange={(value) => canvas.onChangeFontFamily(value)} /> */}
+            <FontFamilyInput value={selected.fontFamily} onChange={(value) => canvas.onChangeFontFamily(value)} />
           </Grid>
-        </Box>
-        <Box px="4">
-          <Text fontWeight={700} fontSize="sm" mb="1">
-            Text Property
-          </Text>
           <Grid templateColumns="100px 1fr" mt="3" alignItems="center">
             <Text fontSize="xs" fontWeight={500}>
               Font Size
             </Text>
-            <PropertyInput value={selected.fontSize} onChange={(value) => canvas.onChangeTextProperty("fontSize", +value)} width="full" />
-          </Grid>
-          <Grid templateColumns="100px 1fr" mt="3" alignItems="center">
-            <Text fontSize="xs" fontWeight={500}>
-              Text Color
-            </Text>
-            {/* <ColorPickerInput value={selected.fill as string} onChange={(color) => canvas.onChangeTextProperty("fill", color)} /> */}
+            <PropertyInput
+              value={selected.fontSize}
+              onChange={(value) => canvas.onChangeTextProperty("fontSize", +value)}
+              width="full"
+            />
           </Grid>
           {selected.name === mainTextKey && (
             <Grid templateColumns="100px 1fr" mt="3" alignItems="center">
