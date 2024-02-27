@@ -1,3 +1,4 @@
+import "@/config/fabric";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "@/pages/Home";
 import { Canvas, CanvasProvider } from "./store/canvas";

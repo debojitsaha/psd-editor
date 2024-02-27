@@ -12,6 +12,7 @@ import {
   ObjectType,
   SceneObject,
   Selected,
+  TextboxKeys,
 } from "@/interface/canvas";
 import { FontFaceResponse } from "@/interface/fonts";
 import { Template } from "@/interface/template";
@@ -273,6 +274,34 @@ export class Canvas {
     image.set(property, value);
 
     this.instance.fire("object:modified", { target: image }).renderAll();
+  }
+
+  onChangeTextProperty(property: TextboxKeys, value: number | string) {
+    if (!this.instance) return;
+
+    const text = this.instance.getActiveObject() as Required<fabricJS.Textbox>;
+    if (!text) return;
+
+    text.set(property, value);
+
+    this.instance.fire("object:modified", { target: text }).renderAll();
+  }
+
+  *onChangeFontFamily(fontFamily = defaultFont) {
+    if (!this.instance) return;
+
+    const res: FontFaceResponse = yield addFontFace(fontFamily);
+
+    if (res.error) {
+      console.log("Error", res.error);
+    }
+
+    const text = this.instance.getActiveObject() as Required<fabricJS.Textbox>;
+    if (!text) return;
+
+    text.set("fontFamily", res.name);
+
+    this.instance.fire("object:modified", { target: text }).renderAll();
   }
 
   onSelect(_: CanvasMouseEvent) {

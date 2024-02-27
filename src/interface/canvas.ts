@@ -11,3 +11,5 @@ export type CanvasState = { version: string; objects: fabric.Object[]; backgroun
 export type CanvasMouseEvent = fabric.IEvent<MouseEvent>;
 
 export type ImageKeys = keyof fabric.Image;
+
+export type TextboxKeys = keyof fabric.Textbox;

@@ -11,5 +11,5 @@ export interface ListItemProps {
 }
 
 export interface PropertyInputProps extends NumberInputProps {
-  label: string;
+  label?: string;
 }

@@ -5,10 +5,11 @@ import { observer } from "mobx-react-lite";
 import { CanvasPropertySidebar } from "./components/CanvasPropertySidebar";
 import { useMemo } from "react";
 import { ObjectType } from "@/interface/canvas";
+import { TextPropertySidebar } from "./components/TextPropertySidebar";
 
 const mapSidebar = {
     none: CanvasPropertySidebar,
-    // textbox: TextPropertySidebar,
+    textbox: TextPropertySidebar,
     image: ImagePropertySidebar,
   };
 

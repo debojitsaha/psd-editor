@@ -1,5 +1,6 @@
 import { createFactory } from "@/functions/utils";
 import { fabric as fabricJS } from "fabric";
+import cursor from "@/assets/rotate-cursor.svg";
 
 const mtr = fabricJS.Textbox.prototype.controls.mtr;
 
@@ -9,7 +10,7 @@ fabricJS.Textbox.prototype.controls.mtr = createFactory(fabricJS.Control, {
   y: -0.5,
   offsetY: -40,
   actionHandler: mtr.actionHandler,
-  cursorStyle: "url(/rotate-cursor.svg) 8 8, auto",
+  cursorStyle: `url(${cursor}) 8 8, auto`,
   actionName: "rotate",
   withConnection: true,
 });
