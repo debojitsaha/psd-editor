@@ -77,13 +77,13 @@ export default function Header() {
           </ActionButton>
         </ButtonGroup>
         <ButtonGroup spacing="0.5">
-          <ActionButton variant="ghost" isDisabled={!canvas.canUndo} onClick={() => canvas.onUndo.bind(canvas)}>
+          <ActionButton variant="ghost" isDisabled={!canvas.canUndo} onClick={canvas.onUndo.bind(canvas)}>
             <Icon as={UndoIcon} fontSize={20} />
             <Text fontSize="xs" mt="2">
               Undo
             </Text>
           </ActionButton>
-          <ActionButton variant="ghost" isDisabled={!canvas.canRedo} onClick={() => canvas.onRedo.bind(canvas)}>
+          <ActionButton variant="ghost" isDisabled={!canvas.canRedo} onClick={canvas.onRedo.bind(canvas)}>
             <Icon as={RedoIcon} fontSize={20} />
             <Text fontSize="xs" mt="2">
               Redo

@@ -342,6 +342,8 @@ export class Canvas {
   onSave(_: CanvasMouseEvent) {
     if (!this.instance) return;
 
+    this.redoStack = [];
+
     const state = this.instance.toObject(exportedProps);
     const element = this.instance.getActiveObject();
 
@@ -361,7 +363,7 @@ export class Canvas {
 
     const element = event.target!;
 
-    if (element.type) {
+    if (element.type === "textbox") {
       const text = element as fabricJS.Textbox;
       text.set({
         fontSize: Math.round(text.fontSize! * element.scaleY!),
@@ -466,9 +468,10 @@ export class Canvas {
     if (!this.instance || !this.canUndo) return;
 
     this.actionsEnabled = false;
-    
+
     const stack = [...this.undoStack];
     const state = stack.pop()!;
+
     const undoState = stack[stack.length - 1];
 
     this.undoStack = stack;
@@ -535,6 +538,8 @@ export function useCanvas(props?: { onInitialize?: (canvas: Canvas) => void }) {
 
   useEffect(() => {
     if (!canvas.instance) return;
+
+    canvas.instance.off();
 
     canvas.instance.on("object:modified", canvas.onSave.bind(canvas));
     canvas.instance.on("object:scaling", canvas.onScale.bind(canvas));
