@@ -9,3 +9,5 @@ export type SceneObject = { name: string; type: ObjectType; index: number };
 export type CanvasState = { version: string; objects: fabric.Object[]; background?: string };
 
 export type CanvasMouseEvent = fabric.IEvent<MouseEvent>;
+
+export type ImageKeys = keyof fabric.Image;

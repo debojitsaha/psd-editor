@@ -4,7 +4,15 @@ import { brandLogoKey, mainTextKey, subTextKey } from "@/constants/keys";
 import { addFontFace } from "@/functions/fonts";
 import { objectID } from "@/functions/nanoid";
 import { createFactory, toFixed } from "@/functions/utils";
-import { CanvasMouseEvent, CanvasState, Clipboard, SceneObject, Selected } from "@/interface/canvas";
+import {
+  CanvasMouseEvent,
+  CanvasState,
+  Clipboard,
+  ImageKeys,
+  ObjectType,
+  SceneObject,
+  Selected,
+} from "@/interface/canvas";
 import { FontFaceResponse } from "@/interface/fonts";
 import { Template } from "@/interface/template";
 import { Optional } from "@/interface/utils";
@@ -63,7 +71,6 @@ export class Canvas {
   private onUpdateObjects() {
     if (!this.instance) return;
     const objects = this.instance.getObjects();
-    console.log(objects);
     this.objects = objects
       .map((object) => object.toObject(exportedProps))
       .map((object, index) => ({ name: object.name, type: object.type, index }));
@@ -128,6 +135,32 @@ export class Canvas {
     if (height) this.instance.setHeight(+height).renderAll();
 
     this.onUpdateDimensions();
+  }
+
+  onChangeObjectDimensions(property: "height" | "width", value: number) {
+    if (!this.instance) return;
+
+    const element = this.instance.getActiveObject() as Required<fabricJS.Object>;
+    if (!element) return;
+
+    const type = element.type as ObjectType;
+
+    switch (type) {
+      case "textbox":
+        if (property === "height") return;
+        element.set(property, value);
+        break;
+      case "image":
+        const scale = property === "height" ? value / element.height! : value / element.width!;
+        const key = property === "height" ? "scaleY" : "scaleX";
+        element.set(key, scale);
+        break;
+      case "rect":
+        element.set(property, value);
+        break;
+    }
+
+    this.instance.fire("object:modified", { target: element }).renderAll();
   }
 
   onInitialize(canvas: fabricJS.Canvas) {
@@ -206,6 +239,40 @@ export class Canvas {
       this.instance.fire("object:modified", { target: null });
       this.instance.renderAll();
     }
+  }
+
+  *onChangeImageSource(source: string) {
+    if (!this.instance) return;
+
+    const image = this.instance.getActiveObject() as Required<fabricJS.Image>;
+    if (!image) return;
+
+    const width = image.width! * image.scaleX!;
+    const height = image.height! * image.scaleY!;
+
+    yield new Promise((resolve) => {
+      image.setSrc(source, () => {
+        resolve(image);
+      });
+    });
+
+    const scaleX = width / image.width!;
+    const scaleY = height / image.height!;
+
+    image.set("scaleX", scaleX).set("scaleY", scaleY);
+
+    this.instance.fire("object:modified", { target: image }).renderAll();
+  }
+
+  onChangeImageProperty(property: ImageKeys, value: number) {
+    if (!this.instance) return;
+
+    const image = this.instance.getActiveObject() as Required<fabricJS.Image>;
+    if (!image) return;
+
+    image.set(property, value);
+
+    this.instance.fire("object:modified", { target: image }).renderAll();
   }
 
   onSelect(_: CanvasMouseEvent) {

@@ -1,6 +1,7 @@
 import { Box, Button, CircularProgress, HStack, chakra } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { FrameIcon, ImageIcon, TypeIcon } from "lucide-react";
+import background from "@/assets/transparent-background.avif";
 
 export const Layout = chakra(Box, {
   baseStyle: {
@@ -75,7 +76,7 @@ export const Drawer = chakra("aside", {
     flexDirection: "column",
     backgroundColor: "white",
     borderRight: "1.5px solid #e2e8f0",
-    width: 275,
+    width: 320,
     overflow: "auto",
   },
 });
@@ -111,3 +112,16 @@ export const inputIcons = {
   image: ImageIcon,
   frame: FrameIcon,
 };
+
+export const TransparentBackground = chakra(Box, {
+  baseStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    mt: 4,
+    px: 4,
+    py: 2,
+    width: "full",
+    background: `url(${background})`,
+  },
+});

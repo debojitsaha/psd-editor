@@ -1,6 +1,7 @@
 import { originalHeight, originalWidth } from "@/config/app";
 import { Header } from "@/layout/Header";
 import { LayerSidebar } from "@/layout/LayerSidebar";
+import PropertySidebar from "@/layout/PropertySidebar/PropertySidebar";
 import { CanvasContainer, Layout, Loader, MainContainer, MainWrapperContainer } from "@/layout/container";
 import { useCanvas } from "@/store/canvas";
 import { useTemplate } from "@/store/template";
@@ -11,7 +12,6 @@ import { useMemo } from "react";
 function _CreateTemplate() {
   const template = useTemplate();
   const [canvas, ref] = useCanvas();
-  console.log(canvas.dimensions);
 
   const dimensions = useMemo(() => {
     return {
@@ -21,6 +21,8 @@ function _CreateTemplate() {
       scaledHeight: (canvas.dimensions.height || originalHeight) * 0.5,
     };
   }, [canvas.dimensions]);
+
+  const propertyKey = canvas.selected?.name ?? template.active?.key;
 
   return (
     <Box display={"flex"}>
@@ -35,6 +37,7 @@ function _CreateTemplate() {
               </CanvasContainer>
             </Box>
           </MainContainer>
+          <PropertySidebar key={propertyKey} />
         </MainWrapperContainer>
       </Layout>
       <Loader isLoading={template.isLoading} />

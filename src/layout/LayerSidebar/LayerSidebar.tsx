@@ -30,9 +30,7 @@ function LayerSidebar() {
     const file = event.target.files?.[0];
     const psd = await parsePSDFromFile(file);
     const generatedLayers = await convertPSDTOTemplate(psd);
-    console.log(generatedLayers);
     await flowResult(template.onInitializeTemplate(generatedLayers));
-    console.log(canvas.objects);
   };
 
   if (!canvas.instance) return <Drawer />;
